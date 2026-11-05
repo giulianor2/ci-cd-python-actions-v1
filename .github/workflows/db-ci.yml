@@ -1,0 +1,49 @@
+name: CI com MySQL
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-db:
+    runs-on: ubuntu-latest
+
+    # Sobe um MySQL temporário ao lado do job
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root_de_teste
+          MYSQL_DATABASE: loja_teste
+          MYSQL_USER: aluno
+          MYSQL_PASSWORD: senha_de_teste
+        ports:
+          - 3306:3306
+        # Espera o banco estar pronto antes de rodar os steps
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    # Variáveis de ambiente disponíveis para todos os steps
+    # (use 127.0.0.1 e não "localhost": veja o aviso abaixo)
+    env:
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: 3306
+      MYSQL_USER: aluno
+      MYSQL_PASSWORD: senha_de_teste
+      MYSQL_DATABASE: loja_teste
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+      - name: Instala dependências
+        run: pip install -r requirements.txt
+      - name: Executa testes (incluindo os de banco)
+        run: pytest -v
