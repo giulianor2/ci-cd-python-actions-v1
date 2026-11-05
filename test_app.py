@@ -19,4 +19,7 @@ def test_multiplicar_com_bug():
     """Verifica se a função multiplicar funciona corretamente."""
     # O correto seria: assert multiplicar(4, 5) == 20
     # Colocamos 21 de propósito para o teste falhar!
-    assert multiplicar(4, 5) == 21
+    assert multiplicar(4, 5) == 20
+    assert multiplicar(3, 0) == 0
+    assert multiplicar(-2, 3) == -6
+    #git add test_app.pyassert multiplicar(4, 5) == 21
