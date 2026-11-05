@@ -12,6 +12,7 @@ def multiplicar(a, b):
     """Multiplica dois números."""
     return a * b
 
+
 def dividir(a, b):
     """Divide dois números."""
     return a / b
