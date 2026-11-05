@@ -22,4 +22,4 @@ def test_multiplicar_com_bug():
     assert multiplicar(4, 5) == 20
     assert multiplicar(3, 0) == 0
     assert multiplicar(-2, 3) == -6
-    #git add test_app.pyassert multiplicar(4, 5) == 21
+    # git add test_app.pyassert multiplicar(4, 5) == 21
