@@ -3,7 +3,6 @@ import os
 import mysql.connector
 
 
-
 def conectar():
     """Abre a conexão usando variáveis de ambiente (nada de senha no código!)."""
     return mysql.connector.connect(

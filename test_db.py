@@ -34,4 +34,4 @@ def test_banco_rejeita_preco_negativo(conn):
     # A constraint CHECK (preco >= 0) deve impedir a inserção
     with pytest.raises(mysql.connector.Error):
         inserir_produto(conn, "Mouse", -10)
-        
+      
