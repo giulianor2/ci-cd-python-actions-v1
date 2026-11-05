@@ -1,0 +1,42 @@
+# 1. Nome do workflow (aparece na aba Actions)
+name: Pipeline CI de Python
+
+# 2. Gatilhos: QUANDO o pipeline roda
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:   # permite rodar manualmente pelo botão "Run workflow"
+
+# 3. Jobs: O QUE o pipeline faz
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest   # máquina virtual Linux, nova e limpa
+
+    # Matriz: o mesmo job roda uma vez para CADA versão de Python
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12", "3.13"]
+
+    # 4. Steps: o passo a passo
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v6          # baixa o seu código para o runner
+
+      - name: Configura Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Instala dependências (etapa de build)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Executa testes unitários com pytest
+        run: pytest -v                     # se algum teste falhar, o job falha
+
+      - name: Mensagem de sucesso
+        if: success()                      # só roda se tudo acima passou
+        run: echo "Build e testes OK no Python ${{ matrix.python-version }}!"
